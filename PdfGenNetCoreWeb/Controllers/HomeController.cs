@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DinkToPdf;
 using DinkToPdf.Contracts;
-
+using DocumentFormat.OpenXml.Packaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenXmlPowerTools;
 using PdfGenNetCoreWeb.Models;
 using Spire.Doc;
 
@@ -151,9 +154,39 @@ namespace PdfGenNetCoreWeb.Controllers
             //  Document document = new Document(Path.Combine(Environment.CurrentDirectory, "SignData_and_VerifyData.docx"), FileFormat.Docx);
             //  document.SaveToFile(Path.Combine(Environment.CurrentDirectory, "docToPdfTest3.pdf"), FileFormat.PDF);
 
-          
+            //  var source = Package.Open(Path.Combine(Environment.CurrentDirectory, "SignData_and_VerifyData.docx"));
+            var source = Package.Open(@"Table.docx");
+            var document = WordprocessingDocument.Open(source);
+            HtmlConverterSettings settings = new HtmlConverterSettings();
+            XElement html = HtmlConverter.ConvertToHtml(document, settings);
 
-            return View();
+            string htmlStr = html.ToString();
+
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings =
+                        {
+                        ColorMode = ColorMode.Color,
+                        Orientation = Orientation.Landscape,
+                        PaperSize = PaperKind.A4Plus,
+                        Out = Path.Combine(Environment.CurrentDirectory, "test23.pdf"),
+            },
+                Objects = {
+                new ObjectSettings() {
+                        PagesCount = true,
+                        HtmlContent = htmlStr,
+                        WebSettings = { DefaultEncoding = "utf-8" },
+                        HeaderSettings = { FontSize = 9, Right = "Страница [page] из [toPage]", Line = true, Spacing = 2.812 },
+                        FooterSettings = { FontSize = 9, Right = "Страница [page] из [toPage]" }
+                }
+            }
+            };
+            _converter.Convert(doc);
+
+
+           
+            
+                return View();
         }
 
             
