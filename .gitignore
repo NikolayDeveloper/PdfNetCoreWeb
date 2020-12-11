@@ -7,3 +7,4 @@ LogDir/
 *.user
 packages/
 .vs/PdfGenNetCoreWeb/v16/
+*.pdf
