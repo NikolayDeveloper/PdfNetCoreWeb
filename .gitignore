@@ -1,5 +1,9 @@
+PdfGenNetCoreWeb/obj/
 .vs/
 obj/
 bin/
 *.orig
 LogDir/
+*.user
+packages/
+.vs/PdfGenNetCoreWeb/v16/
