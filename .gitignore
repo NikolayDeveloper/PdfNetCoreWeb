@@ -6,3 +6,4 @@ bin/
 LogDir/
 *.user
 packages/
+.vs/PdfGenNetCoreWeb/v16/.suo
