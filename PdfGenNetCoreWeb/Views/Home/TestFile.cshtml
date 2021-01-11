@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Test file";
+
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>@ViewBag.OkText</p>
+
+<form id="formReadFile" method="post" asp-action="TestFile" enctype="multipart/form-data">
+	<div id="dvFile" class="form-group row">
+		<label for="file" class="col-sm-2 col-form-label">Файл:</label>
+		<div class="col-sm-10">
+			<input type="hidden" value="15" name="FirmId" />
+			<input type="file" name="File1" id="File1" accept=".xlsx" class="form-control" required  />
+			<span id="fileErrorText" class="text-danger field-validation-valid"></span>
+			<br>
+			<button type="submit" class="btn btn-primary" style="margin-right:15px;">Загрузить</button>
+		</div>
+	</div>
+
+</form>

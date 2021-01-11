@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using DocumentFormat.OpenXml.Packaging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenXmlPowerTools;
@@ -22,7 +23,7 @@ namespace PdfGenNetCoreWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         IConverter _converter;
-        public HomeController(ILogger<HomeController> logger,IConverter converter)
+        public HomeController(ILogger<HomeController> logger, IConverter converter)
         {
             _converter = converter;
             _logger = logger;
@@ -36,13 +37,13 @@ namespace PdfGenNetCoreWeb.Controllers
         {
             return View();
         }
-            
+
         [HttpPost]
         public IActionResult HTMLToPdf(string fileName)
         {
             if (!fileName.Contains(".pdf"))
             {
-                fileName= fileName + ".pdf";
+                fileName = fileName + ".pdf";
             }
 
             string html = @"<h1 align='center' style='color:#ff0099'>Заголовок</h1>
@@ -136,10 +137,10 @@ namespace PdfGenNetCoreWeb.Controllers
             catch (Exception ex)
             {
 
-                result = ex.Message ;
+                result = ex.Message;
             }
             ViewBag.message = result;
-            
+
             return View("Index2");
         }
 
@@ -184,12 +185,12 @@ namespace PdfGenNetCoreWeb.Controllers
             _converter.Convert(doc);
 
 
-           
-            
-                return View();
+
+
+            return View();
         }
 
-            
+
         public IActionResult Privacy()
         {
             return View();
@@ -199,6 +200,18 @@ namespace PdfGenNetCoreWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> TestFile()
+        {
+            ViewBag.OkText = "Тест";
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> TestFile(IFormFile File1, int FirmId)
+        {
+            ViewBag.OkText = $"Успешно {FirmId}";
+            return View();
         }
     }
 }
